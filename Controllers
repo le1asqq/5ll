@@ -1,0 +1,47 @@
+using System.Collections.Generic;
+using System.Web.Mvc;
+using YourProjectName.Models;
+
+namespace YourProjectName.Controllers
+{
+    public class StudentController : Controller
+    {
+        // Имитация БД
+        static List<Student> students = new List<Student>();
+
+        public ActionResult Index()
+        {
+            return View(students);
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(Student student)
+        {
+            students.Add(student);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var student = students.Find(s => s.Id == id);
+            return View(student);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Student student)
+        {
+            var old = students.Find(s => s.Id == student.Id);
+            if (old != null)
+            {
+                students.Remove(old);
+                students.Add(student);
+            }
+            return RedirectToAction("Index");
+        }
+    }
+}
